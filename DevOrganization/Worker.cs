@@ -6,7 +6,62 @@ using System.Threading.Tasks;
 
 namespace DevOrganization
 {
-    class Worker : Employees
+    public class Worker : Employees
     {
+        private int numbOfProjects;
+        private int salary;
+        public Worker()
+        {
+            this.FirstName = "Unnamed";
+            this.SecondName = "Nobody";
+            this.Age = 29;
+            this.Department = null;
+            SetSalary(12*8*24);
+            ChangeNumbOfProjects(1);
+        }
+        public Worker(string firstName, string secondName, int age, Departments department, int salary, int numbOfProjects)
+        {
+            this.FirstName = firstName;
+            this.SecondName = secondName;
+            this.Age = age;
+            this.Department = department;
+            SetSalary(salary);
+            ChangeNumbOfProjects(numbOfProjects);
+        }
+        private void SetSalary(int salary)
+        {
+            this.salary = salary;
+        }
+        #region автосвойства
+        /// <summary>
+        /// Зарплата
+        /// </summary>
+        public override int Salary { get { return this.salary; } }
+        /// <summary>
+        /// Имя
+        /// </summary>
+        public override string FirstName { get; set; }
+        /// <summary>
+        /// Фамилия
+        /// </summary>
+        public override string SecondName { get; set; }
+        /// <summary>
+        /// Возраст
+        /// </summary>
+        public override int Age { get; set; }
+        /// <summary>
+        /// Департамент, к которому принадлежит сотрудник
+        /// </summary>
+        public override Departments Department { get; set; }
+        /// <summary>
+        /// Колличество проектов, в которых задействован сотрудник
+        /// </summary>
+        public override int NumbOfProjects { get { return this.numbOfProjects; } }
+        public void ChangeNumbOfProjects(int number)
+        {
+            if (this.Department.Director.NumbOfProjects <= number)
+            this.numbOfProjects = number;
+        }
+        #endregion
     }
 }

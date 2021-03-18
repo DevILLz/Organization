@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -18,6 +19,7 @@ using System.Windows.Shapes;
 
 namespace DevOrganization
 {
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -27,6 +29,10 @@ namespace DevOrganization
         public MainWindow()
         {
             InitializeComponent();
+            Organization Organization = new Organization("Dev Company");
+            Organization.NewDepartament(new Departments());
+            Organization.GetAllEmployees();
+            int i = 0;
         }
 
         private void Export_button(object sender, RoutedEventArgs e)
