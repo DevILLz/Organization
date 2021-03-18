@@ -28,7 +28,7 @@ namespace DevOrganization
             SetSalary();
             ChangeNumbOfProjects(3);
         }
-        private void SetSalary()
+        public void SetSalary()
         {
             if (this.Department != null)
             {
@@ -64,6 +64,10 @@ namespace DevOrganization
         /// Колличество проектов, в которых задействован сотрудник
         /// </summary>
         public override int NumbOfProjects { get { return this.numbOfProjects; } }
+        /// <summary>
+        /// Изменение кол-ва проектов
+        /// </summary>
+        /// <param name="number">колличество</param>
         public void ChangeNumbOfProjects(int number)
         {
             this.numbOfProjects = number;

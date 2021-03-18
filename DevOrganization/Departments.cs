@@ -8,6 +8,7 @@ namespace DevOrganization
 {
     public class Departments 
     {
+
         public List<Departments> departments = new List<Departments>();
         public List<Employees> Employees = new List<Employees>();
         public Departments()
@@ -22,11 +23,17 @@ namespace DevOrganization
             Employees.Add(Director);
             this.CreationDate = DateTime.Now;
         }
-        public Departments(string name, Director director)
+        public Departments(string name, string firstName, string secondName, int age, int numbOfProjects)
         {
             this.Name = name;
             this.CreationDate = DateTime.Now;
-            this.Director = director;
+            this.Director = new Director(firstName,
+                secondName,
+                age,
+                this,
+                numbOfProjects);
+            Employees.Add(this.Director);
+            
         }
         /// <summary>
         /// Департамент
@@ -39,23 +46,36 @@ namespace DevOrganization
             this.Name = name;
             this.Director = director;
             this.CreationDate = creationDate;
+            Employees.Add(this.Director);
         }
         
-        public Employees this[int index]
-        {
-            get { return Employees[index]; }
-            set { Employees[index] = value; }
-        }
+        //public Employees this[int index]
+        //{
+        //    get { return Employees[index]; }
+        //    set { Employees[index] = value; }
+        //}
 
+        /// <summary>
+        /// Рекурсивный алгоритм получения всех работников данного и нижестоящих департаментов
+        /// </summary>
+        /// <returns></returns>
         public List<Employees> GetAllEmployees()
         {
             List<Employees> emp = new List<Employees>();
-            if (departments.Count>0)
-            foreach (var e in departments)
+            foreach (var e in Employees)
             {
-                emp.Union(e.GetAllEmployees());
+                emp.Add(e);
             }
-            emp.Union(Employees);
+            if (departments.Count > 0)
+            {
+                foreach (var e in departments)
+                {
+                    foreach (var ee in e.GetAllEmployees())
+                    {
+                        emp.Add(ee);
+                    }
+                }
+            }
             return emp;
         }
         public void AddInsideDepartment(Departments dep)
@@ -78,30 +98,57 @@ namespace DevOrganization
             this.Director.Department = this;
             Employees.Add(Director);
         }
-        public void AddWorker(string firstName, string secondName, int age, int salary, int numbOfProjects)
+        /// <summary>
+        /// Добавление нового сотрудника
+        /// </summary>
+        /// <param name="type">Тип сотрудника: Director, Worker, Intern</param>
+        /// <param name="firstName">Имя</param>
+        /// <param name="secondName">Фамилия</param>
+        /// <param name="age">Возраст</param>
+        /// <param name="salary">Зарплата (директору можно поставить что угодно)</param>
+        /// <param name="numbOfProjects">Колличество проектов в котором задействован сотрудник</param>
+        public void AddEmployee(string type, string firstName, string secondName, int age, int salary, int numbOfProjects)
         {
-            Employees.Add(new Worker(
+            type.ToLower();
+            switch (type)
+            {
+                case "intern":
+                    Employees.Add(new Intern(
                 firstName,
                 secondName,
                 age,
                 this,
                 salary,
                 numbOfProjects));
-        }
-        public void AddIntern(string firstName, string secondName, int age, int salary, int numbOfProjects)
-        {
-            Employees.Add(new Intern(
+                    break;
+                case "director":
+                    Employees.Add(new Director(
+                firstName,
+                secondName,
+                age,
+                this,
+                numbOfProjects));
+                    break;
+                default:
+                    Employees.Add(new Worker(
                 firstName,
                 secondName,
                 age,
                 this,
                 salary,
                 numbOfProjects));
+                    break;
+            }
         }
+        public void AddEmployee(Employees worker)
+        {
+            Employees.Add(worker);
+        }
+
         public int GetTotalSalary()
         {
             int total = 0;
-            foreach (var e in Employees)
+            foreach (var e in GetAllEmployees())
             {
                 total += e.Salary;
             }
@@ -127,7 +174,7 @@ namespace DevOrganization
         /// <summary>
         /// Начальник департамента
         /// </summary>
-        public Director Director { get; set; }
+        public Director Director { get; private set;}
         #endregion
     }
 }

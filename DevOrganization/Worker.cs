@@ -16,9 +16,18 @@ namespace DevOrganization
             this.SecondName = "Nobody";
             this.Age = 29;
             this.Department = null;
-            SetSalary(12*8*24);
+            SetSalary(12);
             ChangeNumbOfProjects(1);
         }
+        /// <summary>
+        /// Создания экземпляра класса "рабочий"
+        /// </summary>
+        /// <param name="firstName">Имя</param>
+        /// <param name="secondName">Фамилия</param>
+        /// <param name="age">Возраст</param>
+        /// <param name="department">Департамент</param>
+        /// <param name="salary">Зарплата ($ в час)</param>
+        /// <param name="numbOfProjects">колличество проектов в которм задействован сотрудник</param>
         public Worker(string firstName, string secondName, int age, Departments department, int salary, int numbOfProjects)
         {
             this.FirstName = firstName;
@@ -30,7 +39,7 @@ namespace DevOrganization
         }
         private void SetSalary(int salary)
         {
-            this.salary = salary;
+            this.salary = salary*8*20;//условно возьмём 8-и часовой рабочий день и 20 рабочих дней в месяце
         }
         #region автосвойства
         /// <summary>
@@ -59,8 +68,12 @@ namespace DevOrganization
         public override int NumbOfProjects { get { return this.numbOfProjects; } }
         public void ChangeNumbOfProjects(int number)
         {
-            if (this.Department.Director.NumbOfProjects <= number)
-            this.numbOfProjects = number;
+            if (this.Department != null)
+            {
+                if (this.Department.Director.NumbOfProjects <= number)
+                    this.numbOfProjects = number;
+            }
+            this.numbOfProjects = 0;
         }
         #endregion
     }

@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -26,14 +27,62 @@ namespace DevOrganization
     public partial class MainWindow : Window
     {
         string defaultFileName = "BD";
+        Departments Organization;
+        List<Employees> temp;
         public MainWindow()
         {
             InitializeComponent();
-            Organization Organization = new Organization("Dev Company");
-            Organization.NewDepartament(new Departments());
-            Organization.GetAllEmployees();
-            int i = 0;
+            Organization = new Departments("Dev Company", 
+                "Марк",
+                "Серов",
+                23,
+                23);
+
+            Organization.AddInsideDepartment(new Departments());
+            Organization.AddInsideDepartment(new Departments());
+            //Organization.departments[0].AddInsideDepartment(new Departments());
+            for (int i = 0; i < 30; i++)
+            {
+                switch(new Random().Next(0, 2))
+                {
+                    case 0:
+                        Organization.departments[0].AddEmployee(new Worker());
+                        Organization.departments[1].AddEmployee(new Worker());
+                        break;
+                    default:
+                        Organization.departments[0].AddEmployee(new Intern());
+                        Organization.departments[1].AddEmployee(new Intern());
+
+                        break;
+                        
+                }
+            }
+            temp = Organization.GetAllEmployees();
+            foreach (var e in temp)
+            {
+               if (e is Director)  (e as Director).SetSalary();
+            }
+
+            Export("text,json");
         }
+
+        /// <summary>
+        /// Экспорт данных
+        /// </summary>
+        /// <param name="filename">Имя файла</param>
+        private void Export(string fileName)
+        {
+            string json = JsonConvert.SerializeObject(Organization);// не работает (пробовал отдельный цикл "temp", тоже не работает)
+            File.WriteAllText(fileName, json);
+
+        }
+        // всё что ниже пока не задействовано
+
+
+
+
+
+
 
         private void Export_button(object sender, RoutedEventArgs e)
         {
@@ -91,16 +140,7 @@ namespace DevOrganization
 
         }
 
-        /// <summary>
-        /// Экспорт данных
-        /// </summary>
-        /// <param name="filename">Имя файла</param>
-        private void Export(string fileName)
-        {
-            string json = ""; //JsonConvert.SerializeObject(db_departments);
-            File.WriteAllText(fileName, json);
 
-        }
 
     }
 

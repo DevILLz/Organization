@@ -61,8 +61,12 @@ namespace DevOrganization
         public override int NumbOfProjects { get { return this.numbOfProjects; } }
         public void ChangeNumbOfProjects(int number)
         {
-            if (this.Department.Director.NumbOfProjects <= number)
-                this.numbOfProjects = number;
+            if (this.Department != null)
+            {
+                if (this.Department.Director.NumbOfProjects <= number)
+                    this.numbOfProjects = number;
+            }
+            this.numbOfProjects = 0;
         }
         #endregion
     }
