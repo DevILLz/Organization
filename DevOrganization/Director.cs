@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DevOrganization
+﻿namespace DevOrganization
 {
     public class Director : Employees
     {
-        private int numbOfProjects;
+        //private int numbOfProjects;
         private int salary;
         public Director()
         {
@@ -16,26 +10,33 @@ namespace DevOrganization
             this.SecondName = "Nobody"; ;
             this.Age = 29;
             this.Department = null;
-            SetSalary();
-            ChangeNumbOfProjects(3);
+            SetSalary(0);
         }
-        public Director(string firstName, string secondName, int age, Departments department, int numbOfProjects)
+
+        /// <summary>
+        /// Создание директора
+        /// </summary>
+        /// <param name="firstName">Имя</param>
+        /// <param name="secondName">Фамилия</param>
+        /// <param name="age">Возраст</param>
+        /// <param name="department">Департамент, к которому принадлежит сотрудник</param>
+        public Director(string firstName, string secondName, int age, string department)
         {
             this.FirstName = firstName;
             this.SecondName = secondName;
             this.Age = age;
             this.Department = department;
-            SetSalary();
-            ChangeNumbOfProjects(3);
+            SetSalary(0);
         }
-        public void SetSalary()
+
+        /// <summary>
+        /// Устонавливает зп директору
+        /// </summary>
+        /// <param name="salary"></param>
+        public void SetSalary(int salary)
         {
-            if (this.Department != null)
-            {
-                this.salary = (int)(this.Department.GetTotalSalary() * 0.15);
-                if (this.salary < 1300)
-                    this.salary = 1300;
-            }
+            if (salary > 1300)
+                this.salary = salary;
             else this.salary = 1300;
         }
 
@@ -59,19 +60,19 @@ namespace DevOrganization
         /// <summary>
         /// Департамент, к которому принадлежит сотрудник
         /// </summary>
-        public override Departments Department { get; set; }
+        public override string Department { get; set; }
         /// <summary>
         /// Колличество проектов, в которых задействован сотрудник
         /// </summary>
-        public override int NumbOfProjects { get { return this.numbOfProjects; } }
+        public override int NumbOfProjects { get; } //{ return this.numbOfProjects; } }
         /// <summary>
         /// Изменение кол-ва проектов
         /// </summary>
         /// <param name="number">колличество</param>
-        public void ChangeNumbOfProjects(int number)
-        {
-            this.numbOfProjects = number;
-        }
+        //public void ChangeNumbOfProjects(int number)
+        //{
+        //    this.numbOfProjects = number;
+        //}
         #endregion
     }
 }

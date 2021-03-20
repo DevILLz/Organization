@@ -28,7 +28,7 @@ namespace DevOrganization
         /// <param name="department">Департамент</param>
         /// <param name="salary">Зарплата ($ в час)</param>
         /// <param name="numbOfProjects">колличество проектов в которм задействован сотрудник</param>
-        public Worker(string firstName, string secondName, int age, Departments department, int salary, int numbOfProjects)
+        public Worker(string firstName, string secondName, int age, string department, int salary, int numbOfProjects)
         {
             this.FirstName = firstName;
             this.SecondName = secondName;
@@ -61,18 +61,13 @@ namespace DevOrganization
         /// <summary>
         /// Департамент, к которому принадлежит сотрудник
         /// </summary>
-        public override Departments Department { get; set; }
+        public override string Department { get; set; }
         /// <summary>
         /// Колличество проектов, в которых задействован сотрудник
         /// </summary>
         public override int NumbOfProjects { get { return this.numbOfProjects; } }
         public void ChangeNumbOfProjects(int number)
         {
-            if (this.Department != null)
-            {
-                if (this.Department.Director.NumbOfProjects <= number)
-                    this.numbOfProjects = number;
-            }
             this.numbOfProjects = 0;
         }
         #endregion

@@ -1,22 +1,13 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
+
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+
 
 namespace DevOrganization
 {
@@ -26,64 +17,42 @@ namespace DevOrganization
     /// </summary>
     public partial class MainWindow : Window
     {
-        string defaultFileName = "BD";
-        Departments Organization;
-        List<Employees> temp;
+        string defaultFileName = "BD.json";
+        Departments Organization = new Departments();
         public MainWindow()
         {
             InitializeComponent();
-            Organization = new Departments("Dev Company", 
-                "Марк",
-                "Серов",
-                23,
-                23);
+            Import(defaultFileName);
 
-            Organization.AddInsideDepartment(new Departments());
-            Organization.AddInsideDepartment(new Departments());
-            //Organization.departments[0].AddInsideDepartment(new Departments());
-            for (int i = 0; i < 30; i++)
-            {
-                switch(new Random().Next(0, 2))
-                {
-                    case 0:
-                        Organization.departments[0].AddEmployee(new Worker());
-                        Organization.departments[1].AddEmployee(new Worker());
-                        break;
-                    default:
-                        Organization.departments[0].AddEmployee(new Intern());
-                        Organization.departments[1].AddEmployee(new Intern());
-
-                        break;
-                        
-                }
-            }
-            temp = Organization.GetAllEmployees();
-            foreach (var e in temp)
-            {
-               if (e is Director)  (e as Director).SetSalary();
-            }
-
-            Export("text,json");
+            //Export(defaultFileName);
         }
-
         /// <summary>
         /// Экспорт данных
         /// </summary>
         /// <param name="filename">Имя файла</param>
         private void Export(string fileName)
         {
-            string json = JsonConvert.SerializeObject(Organization);// не работает (пробовал отдельный цикл "temp", тоже не работает)
+            string json = JsonConvert.SerializeObject(Organization, new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.Auto
+            });
             File.WriteAllText(fileName, json);
 
         }
-        // всё что ниже пока не задействовано
+        /// <summary>
+        /// импорт данных
+        /// </summary>
+        /// <param name="filename">Имя файла</param>
+        private void Import(string fileName)
+        {
+            string json = File.ReadAllText(fileName);
+            Organization = JsonConvert.DeserializeObject<Departments>(json, new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.Auto
+            });
+            Organization.DeleteSecondDirector();//костыль, убирает дублирующихся директоров при импорте
 
-
-
-
-
-
-
+        }
         private void Export_button(object sender, RoutedEventArgs e)
         {
             Microsoft.Win32.SaveFileDialog dialog = new Microsoft.Win32.SaveFileDialog();
@@ -112,39 +81,7 @@ namespace DevOrganization
         {
             Export(defaultFileName);
         }
-        /// <summary>
-        /// Открыть окно с данными сотрудников
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Show_Employees(object sender, RoutedEventArgs e)
-        {
-            //EmployeesWindow window = new EmployeesWindow(this);
-            //window.Owner = this;
-            //window.Show();
-        }
-
-
-
-
-
-        /// <summary>
-        /// импорт данных
-        /// </summary>
-        /// <param name="filename">Имя файла</param>
-        private void Import(string fileName)
-        {
-            string json = File.ReadAllText(fileName);
-            //db_departments = JsonConvert.DeserializeObject<ObservableCollection<Departments>>(json);
-            //DG_departments.ItemsSource = db_departments;
-
-        }
-
-
-
     }
-
-
 }
 // Задание 1.
 // Спроектировать информационную систему позволяющей работать со следующей структурой:

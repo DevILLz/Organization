@@ -1,28 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DevOrganization
+﻿namespace DevOrganization
 {
 
     public abstract class Employees
     {
-        private long id;
+        //private long id;
 
-        public long Id
-        {
-            get
-            {
-                return id;
-            }
+        //public long Id
+        //{
+        //    get
+        //    {
+        //        return id;
+        //    }
 
-            private set
-            {
-                id = 0;
-            }
-        }
+        //    private set
+        //    {
+        //        id = 0;
+        //    }
+        //}
         
         /// <summary>
         /// Имя
@@ -39,7 +33,7 @@ namespace DevOrganization
         /// <summary>
         /// Департамент, к которому принадлежит сотрудник
         /// </summary>
-        public abstract Departments Department { get; set; }
+        public abstract string Department { get; set; }
         /// <summary>
         /// Зарплата
         /// </summary>

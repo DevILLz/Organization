@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DevOrganization
+﻿namespace DevOrganization
 {
     public class Intern : Employees
     {
@@ -19,7 +13,16 @@ namespace DevOrganization
             SetSalary(500);
             this.numbOfProjects = 1;
         }
-        public Intern(string firstName, string secondName, int age, Departments department, int salary, int numbOfProjects)
+        /// <summary>
+        /// Создания экземпляра класса "Интерн"
+        /// </summary>
+        /// <param name="firstName">Имя</param>
+        /// <param name="secondName">Фамилия</param>
+        /// <param name="age">Возраст</param>
+        /// <param name="department">Департамент</param>
+        /// <param name="salary">Зарплата ($ в час)</param>
+        /// <param name="numbOfProjects">колличество проектов в которм задействован сотрудник</param>
+        public Intern(string firstName, string secondName, int age, string department, int salary, int numbOfProjects)
         {
             this.FirstName = firstName;
             this.SecondName = secondName;
@@ -28,7 +31,10 @@ namespace DevOrganization
             this.salary = salary;
             this.numbOfProjects = numbOfProjects;
         }
-        
+        /// <summary>
+        /// задаёт зарплату стажеру
+        /// </summary>
+        /// <param name="selary">зарплата</param>
         public void SetSalary(int selary)
         {
             this.salary = selary;
@@ -54,18 +60,13 @@ namespace DevOrganization
         /// <summary>
         /// Департамент, к которому принадлежит сотрудник
         /// </summary>
-        public override Departments Department { get; set; }
+        public override string Department { get; set; }
         /// <summary>
         /// Колличество проектов, в которых задействован сотрудник
         /// </summary>
         public override int NumbOfProjects { get { return this.numbOfProjects; } }
         public void ChangeNumbOfProjects(int number)
         {
-            if (this.Department != null)
-            {
-                if (this.Department.Director.NumbOfProjects <= number)
-                    this.numbOfProjects = number;
-            }
             this.numbOfProjects = 0;
         }
         #endregion
