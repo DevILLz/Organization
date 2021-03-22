@@ -67,6 +67,7 @@ namespace DevOrganization
         /// <param name="filename">Имя файла</param>
         private void Import(string fileName)
         {
+            new Intern(0, 0);
             string json = null;
             try
             {
@@ -74,7 +75,6 @@ namespace DevOrganization
             }
             catch
             {
-                MessageBox.Show("Не удалось найти файл БД");
                 Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog();
                 dialog.Filter = "Json files (*.json)|*.json|All files (*.*)|*.*";
                 dialog.FilterIndex = 0;
@@ -85,12 +85,26 @@ namespace DevOrganization
                     json = File.ReadAllText(dialog.FileName);
                 }
             }
-            
-            new Intern(0, 0);
-            Organizations = JsonConvert.DeserializeObject<ObservableCollection<Departments>>(json, new JsonSerializerSettings
+            try
             {
-                TypeNameHandling = TypeNameHandling.Auto
-            });
+                Organizations = JsonConvert.DeserializeObject<ObservableCollection<Departments>>(json, new JsonSerializerSettings
+                {
+                    TypeNameHandling = TypeNameHandling.Auto
+                });
+            }
+            catch
+            {
+                switch (MessageBox.Show("Данная БД не совместима", "Error", MessageBoxButton.OKCancel))
+                {
+                    case MessageBoxResult.OK:
+                        Import("");
+                        break;
+                    case MessageBoxResult.Cancel:
+                        Environment.Exit(0);
+                        break;
+                }
+                
+            }
             Organizations[0].DeleteSecondDirector();//костыль, убирает дублирующихся директоров при импорте
             Organizations[0].CheckDirector();//еще один костыль, при импорте всегда выставляет ID директора в департаменте
             Organizations[0].SetDirectorSalary();//Не получается десериализовать закрытое свойство
@@ -132,20 +146,22 @@ namespace DevOrganization
         }
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            MessageBoxResult result = MessageBox.Show("Вы уверен, что хотите удалить данный департамент и уволить всех его сотрудников?",
-                "Удаление департамента",
-                MessageBoxButton.YesNo);
-            switch (result)
+            if (DepartmentsTree.SelectedItem != null)
             {
-                case MessageBoxResult.Yes:
-                    Departments temp = DepartmentsTree.SelectedItem as Departments;
-                    DeleteDepartment(Organizations[0], temp);
-                    break;
-                case MessageBoxResult.No:
+                MessageBoxResult result = MessageBox.Show("Вы уверен, что хотите удалить данный департамент и уволить всех его сотрудников?",
+                                "Удаление департамента",
+                                MessageBoxButton.YesNo);
+                switch (result)
+                {
+                    case MessageBoxResult.Yes:
+                        Departments temp = DepartmentsTree.SelectedItem as Departments;
+                        DeleteDepartment(Organizations[0], temp);
+                        break;
+                    case MessageBoxResult.No:
 
-                    break;
+                        break;
+                }
             }
-            
         }
         /// <summary>
         /// Удаление департамента
@@ -182,7 +198,7 @@ namespace DevOrganization
         }
         private void EmployeeTransfer(object sender, RoutedEventArgs e)
         {
-            if (EmployeesList.SelectedIndex > -1 && EmployeesList.SelectedIndex < EmployeesList.Items.Count)
+            if (EmployeesList.SelectedIndex > -1 && EmployeesList.SelectedIndex < EmployeesList.Items.Count && !(depId.Text != null || depId.Text != ""))
             {
                 if (EmployeesList.SelectedItems != null && EmployeesList.SelectedItems.Count > 0)
                 {
@@ -192,6 +208,7 @@ namespace DevOrganization
                     {
                         foreach (var emp in toRemove)
                         {
+                            
                             FindDepartment(Organizations[0], emp, Int64.Parse(depId.Text));
                             items.Remove(emp);
                         }
