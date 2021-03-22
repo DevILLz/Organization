@@ -1,4 +1,6 @@
-﻿namespace DevOrganization
+﻿using System;
+
+namespace DevOrganization
 {
     public class Director : Employees
     {
@@ -9,7 +11,7 @@
         {
             this.FirstName = "Unnamed";
             this.SecondName = "Nobody"; ;
-            this.Age = 29;
+            this.Age = new Random().Next(30, 65);
             this.DepartmentID = 0;
             SetSalary(0);
             id = StaticId;
@@ -33,6 +35,25 @@
             id = StaticId;
             StaticId++;
         }
+
+        ///// <summary>
+        ///// Создание директора
+        ///// </summary>
+        ///// <param name="firstName">Имя</param>
+        ///// <param name="secondName">Фамилия</param>
+        ///// <param name="age">Возраст</param>
+        ///// <param name="department">ID Департамента, к которому принадлежит сотрудник</param>
+        ///// <param name="salary">Зарплата</param>
+        //public Director(string firstName, string secondName, int age, long department, int salary)
+        //{
+        //    this.FirstName = firstName;
+        //    this.SecondName = secondName;
+        //    this.Age = age;
+        //    this.DepartmentID = department;
+        //    SetSalary(salary);
+        //    id = StaticId;
+        //    StaticId++;
+        //}
 
         /// <summary>
         /// Устонавливает зп директору

@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 
 namespace DevOrganization
 {
+
     public class Departments 
     {
         #region автосвойства
@@ -34,7 +35,7 @@ namespace DevOrganization
         public int EmployeesCount { get { return Employees.Count; } }
         #endregion
         public ObservableCollection<Employees> Employees = new ObservableCollection<Employees>();
-        public ObservableCollection<Departments> departments = new ObservableCollection<Departments>();
+        public ObservableCollection<Departments> departments { get; set; }
         /// <summary>
         /// Создание департамента
         /// </summary>
@@ -51,6 +52,8 @@ namespace DevOrganization
             this.CreationDate = DateTime.Now;
             Id = StaticId;
             StaticId++;
+            departments = new ObservableCollection<Departments>();
+            
         }
         /// <summary>
         /// Создание департамента
@@ -71,6 +74,7 @@ namespace DevOrganization
             this.DirectorID = Employees[0].Id;
             Id = StaticId;
             StaticId++;
+            departments = new ObservableCollection<Departments>();
         }
         /// <summary>
         /// Рекурсивный алгоритм получения всех работников данного и нижестоящих департаментов

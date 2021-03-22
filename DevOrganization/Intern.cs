@@ -11,7 +11,7 @@ namespace DevOrganization
         {
             this.FirstName = "Unnamed";
             this.SecondName = "Nobody";
-            this.Age = 29;
+            this.Age = new Random().Next(16, 25);
             this.DepartmentID = 0;
             SetSalary(500);
             this.numbOfProjects = new Random().Next(0, 5);
@@ -22,7 +22,7 @@ namespace DevOrganization
         {
             this.FirstName = "Unnamed";
             this.SecondName = "Nobody";
-            this.Age = 29;
+            this.Age = new Random().Next(16, 25);
             this.DepartmentID = department;
             SetSalary(12);
             this.numbOfProjects = new Random().Next(0, 5);
