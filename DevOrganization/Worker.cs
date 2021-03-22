@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DevOrganization
 {
     public class Worker : Employees
     {
+        private long id;
         private int numbOfProjects;
         private int salary;
         public Worker()
@@ -15,9 +12,24 @@ namespace DevOrganization
             this.FirstName = "Unnamed";
             this.SecondName = "Nobody";
             this.Age = 29;
-            this.Department = null;
+            this.DepartmentID = 0;
             SetSalary(12);
-            ChangeNumbOfProjects(1);
+            this.numbOfProjects = new Random().Next(0, 5);
+            id = StaticId;
+            StaticId++;
+
+        }
+        public Worker(long department)
+        {
+            this.FirstName = "Unnamed";
+            this.SecondName = "Nobody";
+            this.Age = 29;
+            this.DepartmentID = department;
+            SetSalary(12);
+            this.numbOfProjects = new Random().Next(0, 5);
+            id = StaticId;
+            StaticId++;
+
         }
         /// <summary>
         /// Создания экземпляра класса "рабочий"
@@ -28,20 +40,26 @@ namespace DevOrganization
         /// <param name="department">Департамент</param>
         /// <param name="salary">Зарплата ($ в час)</param>
         /// <param name="numbOfProjects">колличество проектов в которм задействован сотрудник</param>
-        public Worker(string firstName, string secondName, int age, string department, int salary, int numbOfProjects)
+        public Worker(string firstName, string secondName, int age, long department, int salary, int numbOfProjects)
         {
             this.FirstName = firstName;
             this.SecondName = secondName;
             this.Age = age;
-            this.Department = department;
+            this.DepartmentID = department;
             SetSalary(salary);
             ChangeNumbOfProjects(numbOfProjects);
+            id = StaticId;
+            StaticId++;
         }
         private void SetSalary(int salary)
         {
             this.salary = salary*8*20;//условно возьмём 8-и часовой рабочий день и 20 рабочих дней в месяце
         }
         #region автосвойства
+        public override long Id
+        {
+            get { return this.id; }
+        }
         /// <summary>
         /// Зарплата
         /// </summary>
@@ -61,7 +79,7 @@ namespace DevOrganization
         /// <summary>
         /// Департамент, к которому принадлежит сотрудник
         /// </summary>
-        public override string Department { get; set; }
+        public override long DepartmentID { get; set; }
         /// <summary>
         /// Колличество проектов, в которых задействован сотрудник
         /// </summary>

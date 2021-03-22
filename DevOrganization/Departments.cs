@@ -6,10 +6,16 @@ namespace DevOrganization
     public class Departments 
     {
         #region автосвойства
+        private static long StaticId { get; set; }
+        static Departments()
+        {
+            StaticId = 0;
+        }
         /// <summary>
         /// ID номер департамента
         /// </summary>
-        public int Id { get; private set; }
+        public long Id { get; private set; }
+
         /// <summary>
         /// Имя департамента
         /// </summary>
@@ -17,11 +23,11 @@ namespace DevOrganization
         /// <summary>
         /// Дата создания департамента
         /// </summary>
-        public DateTime CreationDate { get; private set; }
+        public DateTime CreationDate { get; set; }
         /// <summary>
         /// Начальник департамента
         /// </summary>
-        public Director Director { get; private set; }
+        public long DirectorID { get; set; }
         /// <summary>
         /// Колличество сотрудинков, работающих в данном департамента
         /// </summary>
@@ -35,13 +41,16 @@ namespace DevOrganization
         public Departments()
         {
             this.Name = "test";
-            this.Director = new Director(
+            Employees.Add(new Director(
                 "Александр",
                 "Александрович",
                 40,
-                this.Name);
-            //Employees.Add(Director);
+                this.Id));
+            this.DirectorID = Employees[0].Id;
+            
             this.CreationDate = DateTime.Now;
+            Id = StaticId;
+            StaticId++;
         }
         /// <summary>
         /// Создание департамента
@@ -54,24 +63,14 @@ namespace DevOrganization
         {
             this.Name = name;
             this.CreationDate = DateTime.Now;
-            this.Director = new Director(firstName,
+            Employees.Add(new Director(
+                firstName,
                 secondName,
                 age,
-                this.Name);
-            //Employees.Add(this.Director);  
-        }
-        /// <summary>
-        /// Департамент
-        /// </summary>
-        /// <param name="name">Имя департамента</param>
-        /// <param name="creationDate">Дата создания департамента</param>
-        /// <param name="director">Начальник департамента</param>
-        public Departments(string name, Director director, DateTime creationDate)
-        {
-            this.Name = name;
-            this.Director = director;
-            this.CreationDate = creationDate;
-            //Employees.Add(this.Director);
+                this.Id));
+            this.DirectorID = Employees[0].Id;
+            Id = StaticId;
+            StaticId++;
         }
         /// <summary>
         /// Рекурсивный алгоритм получения всех работников данного и нижестоящих департаментов
@@ -80,7 +79,6 @@ namespace DevOrganization
         public ObservableCollection<Employees> GetAllEmployees()
         {
             ObservableCollection<Employees> emp = new ObservableCollection<Employees>();
-            emp.Add(this.Director);
             foreach (var e in Employees)
             {
                 emp.Add(e);
@@ -111,9 +109,9 @@ namespace DevOrganization
         /// <param name="dir">Новый директор</param>
         public void ChangeDirector(Director dir)
         {
-            this.Director = dir;
-            this.Director.Department = this.Name;
-            Employees.Add(Director);
+            Employees.Insert(0, dir);
+            this.DirectorID = Employees[0].Id;
+            Employees[0].DepartmentID = this.Id;
         }
         /// <summary>
         /// Добавление нового сотрудника
@@ -134,7 +132,7 @@ namespace DevOrganization
                 firstName,
                 secondName,
                 age,
-                this.Name,
+                this.Id,
                 salary,
                 numbOfProjects));
                     break;
@@ -143,14 +141,14 @@ namespace DevOrganization
                 firstName,
                 secondName,
                 age,
-                this.Name));
+                this.Id));
                     break;
                 default:
                     Employees.Add(new Worker(
                 firstName,
                 secondName,
                 age,
-                this.Name,
+                this.Id,
                 salary,
                 numbOfProjects));
                     break;
@@ -164,31 +162,60 @@ namespace DevOrganization
         {
             Employees.Add(worker);
         }
+        bool nothing = false;// очередной костыль
         /// <summary>
         /// Обновляет зарплату директора текущего департамента (призывать дважды)
         /// </summary>
         public void SetDirectorSalary()
         {
-            int total = 0;
-            foreach (var e in GetAllEmployees())
+            while (!nothing)
             {
-                total += e.Salary;
+                int total = 0;
+                int nothing2 = 0;
+                if (departments.Count != 0)
+                {
+                    foreach (var e in departments)
+                    {
+                        if (!e.nothing) nothing2++;
+                    }
+                }
+                if (departments.Count == 0 || nothing2 == 0)
+                {
+                    foreach (var e in GetAllEmployees())
+                    {
+                        total += e.Salary;
+                    }
+                    (Employees[0] as Director).SetSalary((int)(total * 0.15));
+                    nothing = true;
+                }
+                else
+                {
+                    foreach (var e in departments)
+                    {
+                        e.SetDirectorSalary();
+                    }
+                }
             }
-            this.Director.SetSalary((int)(total * 0.15));
-            foreach (var e in this.departments)
-            {
-                e.SetDirectorSalary();
-            }
+            
         }
         /// <summary>
         /// рекурсивный костыль, убирает дублирующихся директоров при импорте
         /// </summary>
         public void DeleteSecondDirector()
         {
+            if (this.Employees.Count >0 )
             this.Employees.RemoveAt(0);
             foreach (var e in this.departments)
             {
                 e.DeleteSecondDirector();
+            }
+        }
+        public void CheckDirector()
+        {
+            this.DirectorID = Employees[0].Id;
+            foreach (var e in this.departments)
+            {
+                e.CheckDirector();
             }
         }
     }

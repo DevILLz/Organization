@@ -3,14 +3,17 @@
     public class Director : Employees
     {
         //private int numbOfProjects;
+        private long id;
         private int salary;
         public Director()
         {
             this.FirstName = "Unnamed";
             this.SecondName = "Nobody"; ;
             this.Age = 29;
-            this.Department = null;
+            this.DepartmentID = 0;
             SetSalary(0);
+            id = StaticId;
+            StaticId++;
         }
 
         /// <summary>
@@ -19,14 +22,16 @@
         /// <param name="firstName">Имя</param>
         /// <param name="secondName">Фамилия</param>
         /// <param name="age">Возраст</param>
-        /// <param name="department">Департамент, к которому принадлежит сотрудник</param>
-        public Director(string firstName, string secondName, int age, string department)
+        /// <param name="department">ID Департамента, к которому принадлежит сотрудник</param>
+        public Director(string firstName, string secondName, int age, long department)
         {
             this.FirstName = firstName;
             this.SecondName = secondName;
             this.Age = age;
-            this.Department = department;
+            this.DepartmentID = department;
             SetSalary(0);
+            id = StaticId;
+            StaticId++;
         }
 
         /// <summary>
@@ -41,6 +46,10 @@
         }
 
         #region автосвойства
+        public override long Id
+        {
+            get { return this.id; }
+        }
         /// <summary>
         /// Зарплата
         /// </summary>
@@ -60,7 +69,7 @@
         /// <summary>
         /// Департамент, к которому принадлежит сотрудник
         /// </summary>
-        public override string Department { get; set; }
+        public override long DepartmentID { get; set; }
         /// <summary>
         /// Колличество проектов, в которых задействован сотрудник
         /// </summary>

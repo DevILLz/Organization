@@ -3,21 +3,13 @@
 
     public abstract class Employees
     {
-        //private long id;
 
-        //public long Id
-        //{
-        //    get
-        //    {
-        //        return id;
-        //    }
-
-        //    private set
-        //    {
-        //        id = 0;
-        //    }
-        //}
-        
+        protected static long StaticId { get; set; }
+        static Employees()
+        {
+            StaticId = 0;
+        }
+        public abstract long Id { get; }
         /// <summary>
         /// Имя
         /// </summary>
@@ -33,7 +25,7 @@
         /// <summary>
         /// Департамент, к которому принадлежит сотрудник
         /// </summary>
-        public abstract string Department { get; set; }
+        public abstract long DepartmentID { get; set; }
         /// <summary>
         /// Зарплата
         /// </summary>

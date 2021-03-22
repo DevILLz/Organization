@@ -5,8 +5,37 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DevOrganization"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" MinHeight="450" MinWidth="800" Width="800"  Closing="Window_Closing">
     <Grid>
-
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition MinWidth="650" Width="*"/>
+            <ColumnDefinition Width="20*"/>
+        </Grid.ColumnDefinitions>
+        <DataGrid Name="EmployeesList" SelectionMode="Extended" Grid.Column="0" ItemsSource="{Binding}" AutoGenerateColumns="False" Grid.Row="1" >
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Имя" Binding="{Binding FirstName}" Width="130"/>
+                <DataGridTextColumn Header="Фамилия" Binding="{Binding SecondName}" Width="130"/>
+                <DataGridTextColumn Header="Возраст"  Binding="{Binding Age}" MinWidth="55" MaxWidth="55"/>
+                <DataGridTextColumn Header="Департамент"  Binding="{Binding DepartmentID}" MinWidth="100" MaxWidth="100" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Зарплата"  Binding="{Binding Salary}" MinWidth="90" MaxWidth="90" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Проекты"  Binding="{Binding NumbOfProjects}" MinWidth="60" MaxWidth="60" IsReadOnly="True"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Menu Grid.Row="0" Grid.ColumnSpan="3" >
+            <MenuItem Header="File">
+                <!--Импорт данных в таблицу из выбранного места-->
+                <MenuItem Header="Импорт данных в таблицу" Click="Import_button"/>
+                <!--Экспорт данных из таблицы в выбранное место-->
+                <MenuItem Header="Экспорт данных из таблицы" Click="Export_button"/>
+            </MenuItem>
+        </Menu>
+        <TextBlock Text="{Binding ElementName=EmployeesList, Path=SelectedItem.Id}"
+                   Grid.Column="1" HorizontalAlignment="Left" Margin="5,5,0,0" 
+                   Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="145"/>
     </Grid>
 </Window>

@@ -3,7 +3,6 @@ using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
-
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -11,20 +10,41 @@ using System.Windows;
 
 namespace DevOrganization
 {
-
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
-        string defaultFileName = "BD.json";
-        Departments Organization = new Departments();
+        readonly string defaultFileName = "BD.json";
+        Departments Organization = new();
         public MainWindow()
         {
             InitializeComponent();
+            EmployeesList.ItemsSource = Organization.Employees;
             Import(defaultFileName);
+            //CreateOrganization();
 
-            //Export(defaultFileName);
+        }
+
+        private void CreateOrganization()
+        {
+            Organization.AddInsideDepartment(new Departments("Разработка","Артур","Власов",32));
+            Organization.departments[0].AddInsideDepartment(new Departments("Разработка", "Дарья", "Олеговна", 32));
+            Organization.AddInsideDepartment(new Departments("HR", "Даниил", "Пыжов", 32));
+            Organization.AddInsideDepartment(new Departments("Маркетинг", "Юрий", "Долгоносов", 32));
+            foreach (var e in Organization.departments)
+            {
+                for (int i = 0; i < 30; i++)
+                    switch (new Random().Next(0, 2))
+                    {
+                        case 0: e.Employees.Add(new Worker(e.Id)); break;
+                        default: e.Employees.Add(new Intern(e.Id)); break;
+                    }
+            }
+            for (int i = 0; i < 30; i++)
+                switch (new Random().Next(0, 2))
+                {
+                    case 0: Organization.departments[0].departments[0].Employees.Add(new Worker()); break;
+                    default: Organization.departments[0].departments[0].Employees.Add(new Intern()); break;
+                }
+            Organization.SetDirectorSalary();
         }
         /// <summary>
         /// Экспорт данных
@@ -46,12 +66,15 @@ namespace DevOrganization
         private void Import(string fileName)
         {
             string json = File.ReadAllText(fileName);
+            new Intern(0, 0);
             Organization = JsonConvert.DeserializeObject<Departments>(json, new JsonSerializerSettings
             {
                 TypeNameHandling = TypeNameHandling.Auto
             });
             Organization.DeleteSecondDirector();//костыль, убирает дублирующихся директоров при импорте
-
+            Organization.CheckDirector();//еще один костыль, при импорте всегда выставляет ID директора в департаменте
+            EmployeesList.ItemsSource = Organization.departments[1].Employees;
+            
         }
         private void Export_button(object sender, RoutedEventArgs e)
         {
