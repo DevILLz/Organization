@@ -198,7 +198,7 @@ namespace DevOrganization
         }
         private void EmployeeTransfer(object sender, RoutedEventArgs e)
         {
-            if (EmployeesList.SelectedIndex > -1 && EmployeesList.SelectedIndex < EmployeesList.Items.Count && !(depId.Text != null || depId.Text != ""))
+            if (EmployeesList.SelectedIndex > -1 && EmployeesList.SelectedIndex < EmployeesList.Items.Count && (depId.Text != null || depId.Text != ""))
             {
                 if (EmployeesList.SelectedItems != null && EmployeesList.SelectedItems.Count > 0)
                 {
