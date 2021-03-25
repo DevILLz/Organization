@@ -35,10 +35,10 @@
             </MenuItem>
             <!--Удаление департамента-->
             <MenuItem Header="Удалить департамент" Click="MenuItem_Click"/>
-            <MenuItem Header="Перевод сотрудника" Click="EmployeeTransfer"/>
+            <!--<MenuItem Header="Перевод сотрудника" Click="EmployeeTransfer"/>-->
         </Menu>
 
-        <TreeView Name="DepartmentsTree" Margin="0,150,0,0" Grid.Column="1" Grid.Row="1" SelectedItemChanged="DepartmentsTree_SelectedItemChanged">
+        <TreeView Name="DepartmentsTree" Margin="0,180,0,0" Grid.Column="1" Grid.Row="1" SelectedItemChanged="DepartmentsTree_SelectedItemChanged">
             <TreeView.Resources>
                 <HierarchicalDataTemplate DataType="{x:Type local:Departments}" ItemsSource="{Binding departments}">
                     <TextBlock Text="{Binding Name}" />
@@ -51,13 +51,12 @@
                  VerticalAlignment="Top" Width="180" Background="WhiteSmoke" BorderBrush="#FF969696">
         </TextBox>
         <TextBlock Text="{Binding SelectedItem.Id, ElementName=DepartmentsTree}"
-                   Grid.Column="1" HorizontalAlignment="Left" Margin="5,129,0,0" 
-                   Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="145"/>
+                   Grid.Column="1" HorizontalAlignment="Left" Margin="5,162,0,0" 
+                   Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="185" FontWeight="Bold"/>
         <TextBlock Grid.Column="1" HorizontalAlignment="Center" Margin="0,5,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" 
-                   Width="180"><Run Text="Введите "/><Run Text="ID "/><Run Text="Департамента"/><Run Text=", в который планируется перевод сотрудник"/>
-            <Run Language="ru-ru" Text="а(ов)"/></TextBlock>
-        <TextBlock Grid.Column="1" HorizontalAlignment="Center" Margin="0,108,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" 
-                   Width="180"><Run Text="ID "/><Run Language="ru-ru" Text="выбранного департамента"/></TextBlock>
+                   Width="180"><Run Text="Введите "/><Run Text="ID "/><Run Text="Департамента"/><Run Text=", в который планируется перевод сотрудник"/><Run Text=" "/><Run Text="а(ов):"/></TextBlock>
+        <TextBlock Grid.Column="1" HorizontalAlignment="Center" Margin="0,141,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" 
+                   Width="180"><Run Text="ID "/><Run Text="выбранного департамента:"/></TextBlock>
         <Button Grid.Column="1" HorizontalAlignment="Center" Margin="0,83,0,0" Grid.Row="1" VerticalAlignment="Top" RenderTransformOrigin="-0.496,0.42" Width="180" Click="EmployeeTransfer">
             <Button Content="Перевод сотрудника"/>
         </Button>
